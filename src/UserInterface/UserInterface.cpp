@@ -118,7 +118,9 @@ namespace UI
             std::cout << "3. Edytuj pytanie" << std::endl;
             std::cout << "4. Usuń pytanie" << std::endl;
             std::cout << "5. Usuń wszystkie pytania" << std::endl;
-            std::cout << "6. Wróć do opcji administracyjnych" << std::endl;
+            std::cout << "6. Eksportuj bazę pytań" << std::endl;
+            std::cout << "7. Importuj bazę pytań" << std::endl;
+            std::cout << "8. Wróć do opcji administracyjnych" << std::endl;
             std::cout << ">";
             std::cin >> *choice;
 
@@ -131,19 +133,26 @@ namespace UI
                     addQuestionPanel();
                     break;
                 case 3:
+                    // TODO:
                     break;
                 case 4:
+                    deleteQuestionPanel();
                     break;
                 case 5:
                     DataManagement::purgeQuestions();
                     break;
                 case 6:
+                    displayExportDBPanel();
+                    break;
+                case 7:
+                    displayImportDBPanel();
+                    break;
+                case 8:
                     return;
                 default:
                     incorrectOptionEntered();
                     break;
             }
-
         }
     }
 
@@ -203,13 +212,80 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void editQuestionPanel()
     {
-        // TODO:
+        int question_num, decision;
+        auto *question = new DataManagement::QuestionEntry;
+        std::cout << "===============================" << std::endl;
+        std::cout << "===== Edytowanie Pytania ======" << std::endl;
+        std::cout << "Wprowadź numer id pytania: ";
+        std::cin >> question_num;
+
+        DataManagement::getQuestionById(question, question_num);
+        if (question == NULL)
+        {
+            MiscUtils::clearScreen();
+            std::cerr << "Podany niepoprawny numer ID!" << std::endl;
+            return;
+        }
+
+        std::cout << "===============================" << std::endl;
+        std::cout << "===== Edytowanie Pytania ======" << std::endl;
+        std::cout << "ID: " << question->question_id << "\r\nPytanie: " << question->question;
+        std::cout << "\r\n\r\nOdpowiedź A: " << question->answerA << "\r\nOdpowiedź B: " << question->answerB;
+        std::cout << "\r\nOdpowiedź C: " << question->answerC << "\r\nOdpowiedź D: " << question->answerD;
+        std::cout << "\r\n\r\nPoprawna odpowiedź: " << question->correctAnswer << std::endl << std::endl;
+        std::cout << "Co chcesz zedytować?(1. Pytanie, 2. Odpowiedź A, 3. Odpowiedź B, 4. Odpowiedź C, 5. Odpowiedź D" ;
+        std::cout << ", 6. Poprawna odpowiedź)" << std::endl << ">";
+        std::cin >> decision;
+
+//        switch (decision)
+//        {
+//            case 1:
+//
+//        }
+
     }
 
     ////////////////////////////////////////////////////////////
     void deleteQuestionPanel()
     {
-        // TODO:
+        int id;
+        std::cout << "===============================" << std::endl;
+        std::cout << "====== Usuwanie Pytania =======" << std::endl;
+        std::cout << "Wprowadź ID pytania do usunięcia: " << std::endl;
+        std::cin >> id;
+        MiscUtils::clearScreen();
+        if(DataManagement::deleteQuestionById(id))
+            std::cout << "Pytanie o ID " << id << " zostało usunięte pomyślnie";
+        else
+            std::cerr << "Nie udało się usunąć pytania o ID " << id << std::endl;
+    }
+
+    void displayExportDBPanel()
+    {
+        std::string relativePath;
+        std::cout << "===============================" << std::endl;
+        std::cout << "== Eksportowanie bazy danych ==" << std::endl;
+        std::cout << "Podaj ścieżkę relatywną do której chcesz \r\nwyeksportować dane (uwzględnij na końcu nazwę pliku): ";
+        std::cin >> relativePath;
+        DataManagement::exportQuestions(relativePath);
+    }
+
+    void displayImportDBPanel()
+    {
+        std::string relativePath;
+        char decision;
+        std::cout << "===============================" << std::endl;
+        std::cout << "== Importowanie bazy danych ==" << std::endl;
+        std::cout << "Czy na pewno chcesz zaimportować bazę danych?\r\nZastąpi to twoją aktualną bazę danych (T/N):";
+        std::cin >> decision;
+        if (tolower(decision)== 'n')
+            return;
+        MiscUtils::clearScreen();
+        std::cout << "===============================" << std::endl;
+        std::cout << "== Importowanie bazy danych ==" << std::endl;
+        std::cout << "Podaj ścieżkę relatywną z której chcesz \r\nzaimportować dane (uwzględnij na końcu nazwę pliku): ";
+        std::cin >> relativePath;
+        DataManagement::importQuestions(relativePath);
     }
 
     ////////////////////////////////////////////////////////////
@@ -330,6 +406,7 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void printAllQuestions()
     {
+        std::cout << "\r\n\r\n\r\n" << std::endl;
         auto *question = new DataManagement::QuestionEntry;
         // TODO: Finish this function
         for (int i=1; ; i++)
@@ -339,7 +416,7 @@ namespace UI
                 std::cout << "ID: " << question->question_id << "\r\nPytanie: " << question->question;
                 std::cout << "\r\n\r\nOdpowiedź A: " << question->answerA << "\r\nOdpowiedź B: " << question->answerB;
                 std::cout << "\r\nOdpowiedź C: " << question->answerC << "\r\nOdpowiedź D: " << question->answerD;
-                std::cout << "\r\n\r\nPoprawna odpowiedź: " << question->correctAnswer << std::endl;
+                std::cout << "\r\n\r\nPoprawna odpowiedź: " << question->correctAnswer << std::endl << std::endl;
             }
             else if (DataManagement::getQuestionById(question, i++))
                 continue;

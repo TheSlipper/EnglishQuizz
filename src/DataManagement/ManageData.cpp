@@ -49,7 +49,6 @@ namespace DataManagement
     ////////////////////////////////////////////////////////////
     bool addQuestion(QuestionEntry *entry)
     {
-        // TODO: Re-write previous questions (re-write function which returns FILE*)
         FILE *filePtr = reWriteQuestions();
         if (filePtr == NULL)
         {
@@ -88,6 +87,7 @@ namespace DataManagement
         fclose(tmpPtr);
         // Zmiana nazwy jest o wiele szybsza niż pisanie pliku na nowo
         makeTempMainDb();
+        return true;
     }
 
     ////////////////////////////////////////////////////////////
@@ -116,15 +116,35 @@ namespace DataManagement
     }
 
     ////////////////////////////////////////////////////////////
-    void exportQuestions(std::string fileName)
+    void exportQuestions(std::string filePath)
     {
-        // TODO: (Maybe just copy the file)
+        // TODO: Check if works
+#ifdef __WINDOWS__
+        // TODO: Implement exporting database for windows
+#endif
+#ifdef __UNIX__
+        std::string command1 = "cp ";
+        command1.append(DB_FILE_PATH);
+        command1.append(" ");
+        command1.append(filePath);
+        system(command1.c_str());
+#endif
     }
 
     ////////////////////////////////////////////////////////////
     void importQuestions(std::string filePath)
     {
-        // TODO:
+        // TODO: Check if works
+#ifdef __WINDOWS__
+        // TODO: Implement importing database for windows
+#endif
+#ifdef __UNIX__
+        std::string command1 = "cp ";
+        command1.append(filePath);
+        command1.append(" ");
+        command1.append(DB_FILE_PATH);
+        system(command1.c_str());
+#endif
     }
 
     ////////////////////////////////////////////////////////////

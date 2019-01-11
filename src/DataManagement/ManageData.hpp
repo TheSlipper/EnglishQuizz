@@ -108,10 +108,10 @@ namespace DataManagement
     ////////////////////////////////////////////////////////////
     /// \brief Eksportuje pytania do pliku o podanej nazwie
     ///
-    /// \param std::string fileName nazwa pliku
+    /// \param std::string filePath ścieżka do nowego pliku
     ///
     ////////////////////////////////////////////////////////////
-    void exportQuestions(std::string fileName);
+    void exportQuestions(std::string filePath);
 
     ////////////////////////////////////////////////////////////
     /// \brief Importuje pytania do pliku o podanej nazwie
