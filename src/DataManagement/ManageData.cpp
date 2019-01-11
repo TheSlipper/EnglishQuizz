@@ -35,7 +35,7 @@ namespace DataManagement
 
         if (filePtr == NULL || tmpPtr == NULL)
         {
-            std::cerr << "Error creating file or accessing it! (bool deleteQuestionById(int id))" << std::endl;
+            std::cerr << "Error creating file or accessing it! (FILE* reWriteQuestions())" << std::endl;
             return nullptr;
         }
 
@@ -128,12 +128,12 @@ namespace DataManagement
     }
 
     ////////////////////////////////////////////////////////////
-    bool readQuestion(QuestionEntry *entry)
+    bool getQuestion(QuestionEntry *entry)
     {
         FILE *filePtr = fopen("testFile.bin", "rb");
         if (filePtr == NULL)
         {
-            std::cerr << "Error creating file or accessing it! (bool readQuestion(QuestionEntry *entry))" << std::endl;
+            std::cerr << "Error creating file or accessing it! (bool getQuestion(QuestionEntry *entry))" << std::endl;
             return false;
         }
         fread(entry, sizeof(QuestionEntry), 1, filePtr);
@@ -161,5 +161,32 @@ namespace DataManagement
         }
         fclose(filePtr);
         return false;
+    }
+
+    ////////////////////////////////////////////////////////////
+    int getNewId()
+    {
+        auto *entry = new QuestionEntry;
+        int prev_val = 0;
+
+        FILE *filePtr = fopen(DB_FILE_PATH, "rb");
+        if (filePtr == NULL)
+        {
+            std::cerr << "Error accessing file! (int getNewId())" << std::endl;
+            return NULL;
+        }
+
+        while(fread(entry, sizeof(QuestionEntry), 1, filePtr) != 0)
+        {
+            prev_val++;
+        }
+        fclose(filePtr);
+
+        if (strcmp(entry->question, "") && prev_val == 0)
+            return 1;
+
+        // TODO: Check if this will return value
+        prev_val++;
+        return prev_val;
     }
 }

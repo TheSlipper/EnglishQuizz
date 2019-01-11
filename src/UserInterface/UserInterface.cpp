@@ -117,7 +117,8 @@ namespace UI
             std::cout << "2. Dodaj pytanie" << std::endl;
             std::cout << "3. Edytuj pytanie" << std::endl;
             std::cout << "4. Usuń pytanie" << std::endl;
-            std::cout << "5. Wróć do opcji administracyjnych" << std::endl;
+            std::cout << "5. Usuń wszystkie pytania" << std::endl;
+            std::cout << "6. Wróć do opcji administracyjnych" << std::endl;
             std::cout << ">";
             std::cin >> *choice;
 
@@ -127,12 +128,16 @@ namespace UI
                     printAllQuestions();
                     break;
                 case 2:
+                    addQuestionPanel();
                     break;
                 case 3:
                     break;
                 case 4:
                     break;
                 case 5:
+                    DataManagement::purgeQuestions();
+                    break;
+                case 6:
                     return;
                 default:
                     incorrectOptionEntered();
@@ -140,6 +145,71 @@ namespace UI
             }
 
         }
+    }
+
+    ////////////////////////////////////////////////////////////
+    void addQuestionPanel()
+    {
+        auto entry = new DataManagement::QuestionEntry;
+        char correct_answer;
+        entry->question_id = DataManagement::getNewId();
+        MiscUtils::clearScreen();
+        std::cout << "===============================" << std::endl;
+        std::cout << "====== Dodawanie pytania ======" << std::endl;
+        std::cout << "Nowe nadane przez system ID: " << entry->question_id << std::endl; //id here
+        std::cout << "1. Wprowadź pytanie: ";
+        std::cin >> entry->question; // TODO: getline() bo tutaj jak będzie spacja to lipa iirc
+
+        std::cout << "2. Wprowadź odpowiedź A: ";
+        std::cin >> entry->answerA;
+        std::cout << "3. Wprowadź odpowiedź B: ";
+        std::cin >> entry->answerB;
+        std::cout << "4. Wprowadź odpowiedź C: ";
+        std::cin >> entry->answerC;
+        std::cout << "5. Wprowadź odpowiedź D: ";
+        std::cin >> entry->answerD;
+
+        std::cout << "5. Wprowadź poprawną odpowiedź (A/B/C/D): ";
+        std::cin >> correct_answer;
+
+        switch(tolower(correct_answer))
+        {
+            case 'a':
+                entry->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                break;
+            case 'b':
+                entry->correctAnswer = DataManagement::CorrectAnswer::answerB;
+                break;
+            case 'c':
+                entry->correctAnswer = DataManagement::CorrectAnswer::answerC;
+                break;
+            case 'd':
+                entry->correctAnswer = DataManagement::CorrectAnswer::answerD;
+                break;
+            default:
+                MiscUtils::clearScreen();
+                std::cerr << "Zła podana wartość. Pytanie nie zostanie dodane" << std::endl;
+                return;
+        }
+
+        MiscUtils::clearScreen();
+        if (DataManagement::addQuestion(entry))
+            std::cout << "Dodano pomyślnie nowe pytanie do bazy danych!" << std::endl;
+        else
+            std::cout << "Napotkany został błąd podczas dodawania pytania. Nie dodano pytania do bazy danych." << std::endl;
+
+    }
+
+    ////////////////////////////////////////////////////////////
+    void editQuestionPanel()
+    {
+        // TODO:
+    }
+
+    ////////////////////////////////////////////////////////////
+    void deleteQuestionPanel()
+    {
+        // TODO:
     }
 
     ////////////////////////////////////////////////////////////
@@ -262,9 +332,19 @@ namespace UI
     {
         auto *question = new DataManagement::QuestionEntry;
         // TODO: Finish this function
-        for ()
+        for (int i=1; ; i++)
         {
-
+            if (DataManagement::getQuestionById(question, i))
+            {
+                std::cout << "ID: " << question->question_id << "\r\nPytanie: " << question->question;
+                std::cout << "\r\n\r\nOdpowiedź A: " << question->answerA << "\r\nOdpowiedź B: " << question->answerB;
+                std::cout << "\r\nOdpowiedź C: " << question->answerC << "\r\nOdpowiedź D: " << question->answerD;
+                std::cout << "\r\n\r\nPoprawna odpowiedź: " << question->correctAnswer << std::endl;
+            }
+            else if (DataManagement::getQuestionById(question, i++))
+                continue;
+            else
+                break;
         }
     }
 }

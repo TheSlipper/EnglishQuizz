@@ -64,8 +64,9 @@ namespace DataManagement
     void makeTempMainDb();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Przepisuje pytania do pliku i zwraca wskaźnik do
-    ///         pliku tymczasowego (po użyciu podmienić nazwę)
+    /// \brief Przepisuje pytania do pliku i pobiera wskaźnik do pliku
+    ///
+    /// \returns FILE* wskaźnik do pliku tymczasowego (po użyciu podmienić nazwę)
     ///
     ////////////////////////////////////////////////////////////
     FILE* reWriteQuestions();
@@ -75,6 +76,8 @@ namespace DataManagement
     ///
     /// \param QuestionEntry *entry pytanie które będzie dodawane
     ///
+    /// \returns bool jeżeli pomyślnie doda pytanie to zwraca true
+    ///
     ////////////////////////////////////////////////////////////
     bool addQuestion(QuestionEntry *entry);
 
@@ -83,11 +86,15 @@ namespace DataManagement
     ///
     /// \param int id id pytania do usunięcia
     ///
+    /// \returns bool jeżeli znajdzie pytanie i je usunie to zwraca true
+    ///
     ////////////////////////////////////////////////////////////
     bool deleteQuestionById(int id);
 
     ////////////////////////////////////////////////////////////
     /// \brief Uaktualnia pytanie o podanym id
+    ///
+    /// \returns bool jeżeli udaje się uaktualnić pytanie
     ///
     ////////////////////////////////////////////////////////////
     bool updateQuestion(int id);
@@ -119,8 +126,10 @@ namespace DataManagement
     ///
     /// \param QuestionEntry *entry wskaźnik do miejsca zapisu pytania
     ///
+    /// \returns bool jeżeli znajdzie pytanie to zwraca true
+    ///
     ////////////////////////////////////////////////////////////
-    bool readQuestion(QuestionEntry *entry);
+    bool getQuestion(QuestionEntry *entry);
 
     ////////////////////////////////////////////////////////////
     /// \brief Czyta pierwsze pytanie z bazy danych
@@ -129,6 +138,16 @@ namespace DataManagement
     ///
     /// \param int id id pytania do pozyskania
     ///
+    /// \returns bool jeżeli znajdzie pytanie to zwraca true
+    ///
     ////////////////////////////////////////////////////////////
     bool getQuestionById(QuestionEntry *entry, int id);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Czyta pierwsze pytanie z bazy danych
+    ///
+    /// \returns int id nowy unikatowy id dla pytania
+    ///
+    ////////////////////////////////////////////////////////////
+    int getNewId();
 }

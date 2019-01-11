@@ -4,7 +4,9 @@
 
 namespace UserManagement
 {
-    enum PrivilageGroup {student, teacher, unset};
+    // TODO: Comment this section
+    // TODO: Change the priority later (unset first)
+    enum PrivilageGroup {teacher, student, unset};
 
     struct User
     {
