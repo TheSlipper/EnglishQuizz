@@ -133,7 +133,7 @@ namespace UI
                     addQuestionPanel();
                     break;
                 case 3:
-                    // TODO:
+                    editQuestionPanel();
                     break;
                 case 4:
                     deleteQuestionPanel();
@@ -212,15 +212,17 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void editQuestionPanel()
     {
-        int question_num, decision;
+        int question_num;
+        char odp;
         auto *question = new DataManagement::QuestionEntry;
+        question->question_id = INT32_MAX;
         std::cout << "===============================" << std::endl;
         std::cout << "===== Edytowanie Pytania ======" << std::endl;
         std::cout << "Wprowadź numer id pytania: ";
         std::cin >> question_num;
 
         DataManagement::getQuestionById(question, question_num);
-        if (question == NULL)
+        if (question->question_id == INT32_MAX)
         {
             MiscUtils::clearScreen();
             std::cerr << "Podany niepoprawny numer ID!" << std::endl;
@@ -233,16 +235,45 @@ namespace UI
         std::cout << "\r\n\r\nOdpowiedź A: " << question->answerA << "\r\nOdpowiedź B: " << question->answerB;
         std::cout << "\r\nOdpowiedź C: " << question->answerC << "\r\nOdpowiedź D: " << question->answerD;
         std::cout << "\r\n\r\nPoprawna odpowiedź: " << question->correctAnswer << std::endl << std::endl;
-        std::cout << "Co chcesz zedytować?(1. Pytanie, 2. Odpowiedź A, 3. Odpowiedź B, 4. Odpowiedź C, 5. Odpowiedź D" ;
-        std::cout << ", 6. Poprawna odpowiedź)" << std::endl << ">";
-        std::cin >> decision;
 
-//        switch (decision)
-//        {
-//            case 1:
-//
-//        }
+        std::cout << "Wprowadź pytanie: ";  // TODO: Remember to change this to getline()
+        std::cin >> question->question;
 
+        std::cout <<"Wprowadź odpowiedź A: ";
+        std::cin >> question->answerA;
+        std::cout <<"Wprowadź odpowiedź B: ";
+        std::cin >> question->answerB;
+        std::cout <<"Wprowadź odpowiedź C: ";
+        std::cin >> question->answerC;
+        std::cout <<"Wprowadź odpowiedź D: ";
+        std::cin >> question->answerD;
+
+        std::cout << "Która odpowiedź jest poprawna (A/B/C/D)? : ";
+        std::cin >> odp;
+
+        MiscUtils::clearScreen();
+        switch (tolower(odp))
+        {
+            case 'a':
+                question->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                break;
+            case 'b':
+                question->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                break;
+            case 'c':
+                question->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                break;
+            case 'd':
+                question->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                break;
+            default:
+                std::cerr << "Niepoprawna odpowiedź wpisana! Pytanie nie zostało nadpisane!" << std::endl;
+                break;
+        }
+
+        DataManagement::deleteQuestionById(question_num);
+        DataManagement::addQuestion(question);
+        std::cout << "Pomyślnie zedytowano pytanie o ID " << question_num << std::endl;
     }
 
     ////////////////////////////////////////////////////////////
@@ -361,7 +392,7 @@ namespace UI
             std::cout << "= Password: ";
             std::cin >> user->password;
 
-            if (UserManagement::logIn(user->username, user->password))
+            if (UserManagement::logIn(user->username, user->password, user))
                 displayMainMenu(user);
             else
             {
@@ -378,13 +409,17 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void displayAddUserPanel()
     {
-        std::string name, surname;
-        std::cout << "Wprowadź imię: " << std::endl;
+        std::string name, password;
+        int group;
+        std::cout << "Wprowadź nowy login: ";
         std::cin >> name;
-        std::cout << "Wprowadź nazwisko: " << std::endl;
-        std::cin >> surname;
+        std::cout << "Wprowadź nowe hasło: ";
+        std::cin >> password;
+        std::cout << "Wybierz grupę przywilejów (1. Teacher, 2. Student): ";
+        std::cin >> group;
 
-        if(UserManagement::addUser(name, surname))
+
+        if(UserManagement::addUser(name, password, (UserManagement::PrivilageGroup)group))
             std::cout << "Pomyślnie dodano użytkownika" << std::endl;
         else
             std::cerr << "Błąd przy dodawaniu użytkownika" << std::endl;
