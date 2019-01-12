@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 file(GLOB SOURCE_FILES
         "src/*.cpp"
-        "src/DataManagement/*.cpp"
+        "src/QuestionManagement/*.cpp"
         "src/MiscellaneousUtilities/*.cpp"
         "src/UserInterface/*.cpp"
         "src/UserManagement/*.cpp")

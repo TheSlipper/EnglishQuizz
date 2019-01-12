@@ -10,7 +10,7 @@
 #include <iostream>
 #include "../UserManagement/UserManagement.hpp"
 #include "../MiscellaneousUtilities/MiscUtils.hpp"
-#include "../DataManagement/ManageData.hpp"
+#include "../QuestionManagement/ManageQuestions.hpp"
 
 ////////////////////////////////////////////////////////////
 /// \brief UI namespace to moduł zawierający funkcje interfejsu

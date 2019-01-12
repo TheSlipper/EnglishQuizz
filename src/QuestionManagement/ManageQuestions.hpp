@@ -23,7 +23,7 @@
 ///          funkcje zarządzające bazą danych pytań.
 ///
 ////////////////////////////////////////////////////////////
-namespace DataManagement
+namespace QuestionManagement
 {
 
     enum CorrectAnswer {answerA, answerB, answerC, answerD}; ///< enum zawierający możliwe poprawne odpowiedzi

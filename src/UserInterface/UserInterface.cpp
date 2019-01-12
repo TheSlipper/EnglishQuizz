@@ -139,7 +139,7 @@ namespace UI
                     deleteQuestionPanel();
                     break;
                 case 5:
-                    DataManagement::purgeQuestions();
+                    QuestionManagement::purgeQuestions();
                     break;
                 case 6:
                     displayExportDBPanel();
@@ -159,9 +159,9 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void addQuestionPanel()
     {
-        auto entry = new DataManagement::QuestionEntry;
+        auto entry = new QuestionManagement::QuestionEntry;
         char correct_answer;
-        entry->question_id = DataManagement::getNewId();
+        entry->question_id = QuestionManagement::getNewId();
         MiscUtils::clearScreen();
         std::cout << "===============================" << std::endl;
         std::cout << "====== Dodawanie pytania ======" << std::endl;
@@ -184,16 +184,16 @@ namespace UI
         switch(tolower(correct_answer))
         {
             case 'a':
-                entry->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                entry->correctAnswer = QuestionManagement::CorrectAnswer::answerA;
                 break;
             case 'b':
-                entry->correctAnswer = DataManagement::CorrectAnswer::answerB;
+                entry->correctAnswer = QuestionManagement::CorrectAnswer::answerB;
                 break;
             case 'c':
-                entry->correctAnswer = DataManagement::CorrectAnswer::answerC;
+                entry->correctAnswer = QuestionManagement::CorrectAnswer::answerC;
                 break;
             case 'd':
-                entry->correctAnswer = DataManagement::CorrectAnswer::answerD;
+                entry->correctAnswer = QuestionManagement::CorrectAnswer::answerD;
                 break;
             default:
                 MiscUtils::clearScreen();
@@ -202,7 +202,7 @@ namespace UI
         }
 
         MiscUtils::clearScreen();
-        if (DataManagement::addQuestion(entry))
+        if (QuestionManagement::addQuestion(entry))
             std::cout << "Dodano pomyślnie nowe pytanie do bazy danych!" << std::endl;
         else
             std::cout << "Napotkany został błąd podczas dodawania pytania. Nie dodano pytania do bazy danych." << std::endl;
@@ -214,14 +214,14 @@ namespace UI
     {
         int question_num;
         char odp;
-        auto *question = new DataManagement::QuestionEntry;
+        auto *question = new QuestionManagement::QuestionEntry;
         question->question_id = INT32_MAX;
         std::cout << "===============================" << std::endl;
         std::cout << "===== Edytowanie Pytania ======" << std::endl;
         std::cout << "Wprowadź numer id pytania: ";
         std::cin >> question_num;
 
-        DataManagement::getQuestionById(question, question_num);
+        QuestionManagement::getQuestionById(question, question_num);
         if (question->question_id == INT32_MAX)
         {
             MiscUtils::clearScreen();
@@ -255,24 +255,24 @@ namespace UI
         switch (tolower(odp))
         {
             case 'a':
-                question->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                question->correctAnswer = QuestionManagement::CorrectAnswer::answerA;
                 break;
             case 'b':
-                question->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                question->correctAnswer = QuestionManagement::CorrectAnswer::answerA;
                 break;
             case 'c':
-                question->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                question->correctAnswer = QuestionManagement::CorrectAnswer::answerA;
                 break;
             case 'd':
-                question->correctAnswer = DataManagement::CorrectAnswer::answerA;
+                question->correctAnswer = QuestionManagement::CorrectAnswer::answerA;
                 break;
             default:
                 std::cerr << "Niepoprawna odpowiedź wpisana! Pytanie nie zostało nadpisane!" << std::endl;
                 break;
         }
 
-        DataManagement::deleteQuestionById(question_num);
-        DataManagement::addQuestion(question);
+        QuestionManagement::deleteQuestionById(question_num);
+        QuestionManagement::addQuestion(question);
         std::cout << "Pomyślnie zedytowano pytanie o ID " << question_num << std::endl;
     }
 
@@ -285,7 +285,7 @@ namespace UI
         std::cout << "Wprowadź ID pytania do usunięcia: " << std::endl;
         std::cin >> id;
         MiscUtils::clearScreen();
-        if(DataManagement::deleteQuestionById(id))
+        if(QuestionManagement::deleteQuestionById(id))
             std::cout << "Pytanie o ID " << id << " zostało usunięte pomyślnie";
         else
             std::cerr << "Nie udało się usunąć pytania o ID " << id << std::endl;
@@ -299,7 +299,7 @@ namespace UI
         std::cout << "== Eksportowanie bazy danych ==" << std::endl;
         std::cout << "Podaj ścieżkę relatywną do której chcesz \r\nwyeksportować dane (uwzględnij na końcu nazwę pliku): ";
         std::cin >> relativePath;
-        DataManagement::exportQuestions(relativePath);
+        QuestionManagement::exportQuestions(relativePath);
     }
 
     ////////////////////////////////////////////////////////////
@@ -318,7 +318,7 @@ namespace UI
         std::cout << "== Importowanie bazy danych ==" << std::endl;
         std::cout << "Podaj ścieżkę relatywną z której chcesz \r\nzaimportować dane (uwzględnij na końcu nazwę pliku): ";
         std::cin >> relativePath;
-        DataManagement::importQuestions(relativePath);
+        QuestionManagement::importQuestions(relativePath);
     }
 
     ////////////////////////////////////////////////////////////
@@ -520,18 +520,18 @@ namespace UI
     void printAllQuestions()
     {
         std::cout << "\r\n\r\n\r\n" << std::endl;
-        auto *question = new DataManagement::QuestionEntry;
+        auto *question = new QuestionManagement::QuestionEntry;
         // TODO: Finish this function
         for (int i = 1; ; i++)
         {
-            if (DataManagement::getQuestionById(question, i))
+            if (QuestionManagement::getQuestionById(question, i))
             {
                 std::cout << "ID: " << question->question_id << "\r\nPytanie: " << question->question;
                 std::cout << "\r\n\r\nOdpowiedź A: " << question->answerA << "\r\nOdpowiedź B: " << question->answerB;
                 std::cout << "\r\nOdpowiedź C: " << question->answerC << "\r\nOdpowiedź D: " << question->answerD;
                 std::cout << "\r\n\r\nPoprawna odpowiedź: " << question->correctAnswer << std::endl << std::endl;
             }
-            else if (DataManagement::getQuestionById(question, i++))
+            else if (QuestionManagement::getQuestionById(question, i++))
                 continue;
             else
                 break;
