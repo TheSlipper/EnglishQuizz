@@ -123,8 +123,30 @@ namespace UserManagement
     ////////////////////////////////////////////////////////////
     /// \brief Usuwa wszystkich użytkowników
     ///
-    /// \return zwraca true jeżeli pomyślnie usunie bazę danych użytkowników
+    ////////////////////////////////////////////////////////////
+    void purgeUserDB();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Załadowuje n-ty wpis w bazie danych użytkowników
+    ///
+    /// \param User* user miejsce do którego ma być załadowany user
+    ///
+    /// \param int n numer rzędu do załadowania
+    ///
+    /// \return zwraca true jeżeli pomyślnie załaduje użytkownika
     ///
     ////////////////////////////////////////////////////////////
-    bool purgeUserDB();
+    bool loadNthUsr(User *user, int n);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Załadowuje n-ty wpis w bazie danych użytkowników
+    ///
+    /// \param User* user miejsce do którego ma być załadowany user
+    ///
+    /// \param std::string username załadowuje użytkownika o tym nicknamie
+    ///
+    /// \return zwraca true jeżeli pomyślnie załaduje użytkownika
+    ///
+    ////////////////////////////////////////////////////////////
+    bool getUserByNickname(User *user, std::string username);
 }

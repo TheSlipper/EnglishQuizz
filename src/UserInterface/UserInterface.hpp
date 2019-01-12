@@ -109,7 +109,7 @@ namespace UI
     /// \brief Wyświetla ustawienia programu (ustawienia są globalne)
     ///
     ////////////////////////////////////////////////////////////
-    void displaySettings();
+    void displaySettingsPanel(UserManagement::User *user);
 
     ////////////////////////////////////////////////////////////
     /// \brief Wyświetla ekran logowania
@@ -124,20 +124,34 @@ namespace UI
     void displayAddUserPanel();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Wyświetla ekran edytowania nowego użytkownika
+    /// \brief Wyświetla ekran edytowania hasła użytkownika
     ///
     ////////////////////////////////////////////////////////////
-    void displayEditUserPanel();
+    void displayEditPasswordPanel(UserManagement::User *user);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Wyświetla ekran usuwania nowego użytkownika
+    /// \brief Wyświetla ekran usuwania użytkownika (część panelu
+    ///         administracyjnego)
     ///
     ////////////////////////////////////////////////////////////
     void displayDeleteUserPanel();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Wyświetla ekran usuwania zalogowanego użytkownika
+    ///         (część panelu studenta)
+    ///
+    ////////////////////////////////////////////////////////////
+    void displayDeleteCurrentUser();
 
     ////////////////////////////////////////////////////////////
     /// \brief Wypisuje na ekran wszystkie pytania
     ///
     ////////////////////////////////////////////////////////////
     void printAllQuestions();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Wypisuje na ekran wszystkich użytkowników
+    ///
+    ////////////////////////////////////////////////////////////
+    void printAllUsers();
 }

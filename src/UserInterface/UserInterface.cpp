@@ -32,7 +32,7 @@ namespace UI
             else
                 std::cout << "1. Zobacz wyniki poprzednich testów" << std::endl;
             std::cout << "2. Napisz test" << std::endl;
-            std::cout << "3. Ustawienia programu" << std::endl;
+            std::cout << "3. Ustawienia" << std::endl;
             std::cout << "4. Wyloguj się" << std::endl;
             std::cout << "5. Wyłącz program" << std::endl;
             std::cout << ">";
@@ -50,7 +50,7 @@ namespace UI
                     // TODO:
                     break;
                 case 3:
-                    displaySettings();
+                    displaySettingsPanel(user);
                     break;
                 case 4:
                     UserManagement::logOut(user);
@@ -291,6 +291,7 @@ namespace UI
             std::cerr << "Nie udało się usunąć pytania o ID " << id << std::endl;
     }
 
+    ////////////////////////////////////////////////////////////
     void displayExportDBPanel()
     {
         std::string relativePath;
@@ -301,6 +302,7 @@ namespace UI
         DataManagement::exportQuestions(relativePath);
     }
 
+    ////////////////////////////////////////////////////////////
     void displayImportDBPanel()
     {
         std::string relativePath;
@@ -328,28 +330,32 @@ namespace UI
             std::unique_ptr<int> choice = std::make_unique<int>();
             std::cout << "===============================" << std::endl;
             std::cout << "== Zarządzanie użytkownikami ==" << std::endl;
-            std::cout << "1. Dodaj użytkownika" << std::endl;
-            std::cout << "2. Edytuj użytkownika" << std::endl;
-            std::cout << "3. Usuń użytkownika" << std::endl;
-            std::cout << "4. Wróć do opcji administracyjnych" << std::endl;
+            std::cout << "1. Pokaż wszystkich użytkowników" << std::endl;
+            std::cout << "2. Dodaj użytkownika" << std::endl;
+            std::cout << "3. Edytuj użytkownika" << std::endl;
+            std::cout << "4. Usuń użytkownika" << std::endl;
+            std::cout << "5. Wróć do opcji administracyjnych" << std::endl;
             std::cout << ">";
             std::cin >> *choice;
             switch(*choice)
             {
                 case 1:
-                    displayAddUserPanel();
+                    printAllUsers();
                     break;
                 case 2:
+                    displayAddUserPanel();
                     break;
                 case 3:
                     break;
                 case 4:
+                    displayDeleteUserPanel();
+                    break;
+                case 5:
                     return;
                 default:
                     incorrectOptionEntered();
                     break;
             }
-            break;
         }
     }
 
@@ -357,6 +363,7 @@ namespace UI
     void displayAllScores()
     {
         // TODO:
+
     }
 
     ////////////////////////////////////////////////////////////
@@ -372,18 +379,43 @@ namespace UI
     }
 
     ////////////////////////////////////////////////////////////
-    void displaySettings()
+    void displaySettingsPanel(UserManagement::User *user)
     {
-        // TODO:
+        // TODO: Check if works
+        MiscUtils::clearScreen();
+        while (true)
+        {
+            std::unique_ptr<int> choice = std::make_unique<int>();
+            std::cout << "===============================" << std::endl;
+            std::cout << "========== Ustawienia =========" << std::endl;
+            std::cout << "1. Zmień hasło zalogowanego użytkownika" << std::endl;
+            std::cout << "2. Wróć do głównego menu" << std::endl;
+            std::cout << ">";
+            std::cin >> *choice;
+
+            MiscUtils::clearScreen();
+            switch(*choice)
+            {
+                case 1:
+                    displayEditPasswordPanel(user);
+                    break;
+                case 2:
+                    return;
+                default:
+                    incorrectOptionEntered();
+                    break;
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////
     void displayLoginScreen()
     {
-        auto *user = new UserManagement::User;
-
         while(true)
         {
+            auto *user = new UserManagement::User;
+            // TODO: Consider unique_ptr
+//            std::unique_ptr<UserManagement::User> user = std::make_unique<UserManagement::User>();
             MiscUtils::clearScreen();
             std::cout << "===============================" << std::endl;
             std::cout << "========= Zaloguj się =========" << std::endl;
@@ -396,11 +428,11 @@ namespace UI
                 displayMainMenu(user);
             else
             {
+                char decision;
                 std::cout << "Niepoprawne dane logowania!" << std::endl;
                 std::cout << "Spróbować się zalogować jeszcze raz? (t/n): ";
-                if (getchar() == 't')
-                    return;
-                else
+                std::cin >> decision;
+                if (tolower(decision) != 't')
                     exit(0);
             }
         }
@@ -409,6 +441,7 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void displayAddUserPanel()
     {
+        MiscUtils::clearScreen();   // TODO: Check if this is needed
         std::string name, password;
         int group;
         std::cout << "Wprowadź nowy login: ";
@@ -419,6 +452,7 @@ namespace UI
         std::cin >> group;
 
 
+        MiscUtils::clearScreen();
         if(UserManagement::addUser(name, password, (UserManagement::PrivilageGroup)group))
             std::cout << "Pomyślnie dodano użytkownika" << std::endl;
         else
@@ -426,14 +460,58 @@ namespace UI
     }
 
     ////////////////////////////////////////////////////////////
-    void displayEditUserPanel()
+    void displayEditPasswordPanel(UserManagement::User *user)
     {
-        UserManagement::User *user;
-        // TODO:
+        MiscUtils::clearScreen();
+        std::string login, newPasswd;
+        login = user->username;
+
+        if (!UserManagement::getUserByNickname(user, login))
+        {
+            std::cerr << "Nie znaleziono użytkownika o podanym nickname'ie!" << std::endl;
+            return;
+        }
+
+        MiscUtils::clearScreen();
+        std::cout << "Podaj nowe hasło: ";
+        std::cin >> newPasswd;
+
+        MiscUtils::clearScreen();
+        std::copy(newPasswd.begin(), newPasswd.end(), user->password);
+        UserManagement::removeUser(login);
+        UserManagement::addUser(login, newPasswd, user->group);
+        std::cout << "Pomyślnie zmieniono hasło!" << std::endl;
     }
 
     ////////////////////////////////////////////////////////////
     void displayDeleteUserPanel()
+    {
+        MiscUtils::clearScreen();
+        std::string username;
+        char final_decision;
+
+        std::cout << "Wprowadź login użytkownika do skasowania: ";
+        std::cin >> username;
+        std::cout << "Czy na pewno chcesz skasować użytkownika?\r\nNie da się tego później cofnąć (T/N):";
+        std::cin >> final_decision;
+
+        MiscUtils::clearScreen();
+        if (tolower(final_decision) == 'N')
+        {
+            std::cout << "Nie skasowano użytkownika " << username << std::endl;
+            return;
+        }
+        else
+        {
+            if (UserManagement::removeUser(username))
+                std::cout << "Pomyślnie skasowano użytkownika " << username << std::endl;
+            else
+                std::cerr << "Błąd podczas usuwania użytkownika!" << std::endl;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////
+    void displayDeleteCurrentUser()
     {
         // TODO:
     }
@@ -444,7 +522,7 @@ namespace UI
         std::cout << "\r\n\r\n\r\n" << std::endl;
         auto *question = new DataManagement::QuestionEntry;
         // TODO: Finish this function
-        for (int i=1; ; i++)
+        for (int i = 1; ; i++)
         {
             if (DataManagement::getQuestionById(question, i))
             {
@@ -457,6 +535,35 @@ namespace UI
                 continue;
             else
                 break;
+        }
+    }
+
+    void printAllUsers()
+    {
+        std::cout << "\r\n\r\n\r\n" << std::endl;
+        auto *user = new UserManagement::User;
+        int i = 1;
+
+        while (UserManagement::loadNthUsr(user, i))
+        {
+            std::cout << "Użytkownik: " << user->username << "; Grupa przywilejów: ";
+            switch (user->group)
+            {
+                case UserManagement::PrivilageGroup::teacher :
+                    std::cout << "nauczyciel";
+                    break;
+                case UserManagement::PrivilageGroup::student :
+                    std::cout << "student";
+                    break;
+                case UserManagement::PrivilageGroup::unset :
+                    std::cout << "unset";
+                    break;
+                default:
+                    std::cout << "Nieprawidłowa grupa! Błąd programu!";
+                    break;
+            }
+            std::cout << std::endl;
+            i++;
         }
     }
 }

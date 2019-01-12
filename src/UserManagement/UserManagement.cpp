@@ -20,8 +20,8 @@ namespace UserManagement
     ////////////////////////////////////////////////////////////
     bool logIn(std::string username, std::string password, User *user)
     {
+        auto *helper = new User;
         FILE *filePtr = fopen(USER_DB_FILE_PATH, "rb");
-        std::unique_ptr<std::string> tempUsername, tempPassword;
 
         if (filePtr == NULL)
         {
@@ -29,15 +29,17 @@ namespace UserManagement
             return nullptr;
         }
 
-        while(fread(user, sizeof(User), 1, filePtr) != 0)
+        while(fread(helper, sizeof(User), 1, filePtr) != 0)
         {
-            tempUsername = std::make_unique<std::string>();
-            strcpy(user->username, tempUsername->c_str());
-            tempPassword = std::make_unique<std::string>();
-            strcpy(user->password, tempUsername->c_str());
-
-            if (username.compare(*tempUsername) && password.compare(*tempPassword))
+            std::string helperUsername, helperPasswd;
+            helperUsername = helper->username;
+            helperPasswd = helper->password;
+            if (username.compare(helperUsername) == 0 && password.compare(helperPasswd) == 0)
+            {
+                user->group = helper->group;
+                delete helper;
                 return true;
+            }
         }
 
         return false;
@@ -46,7 +48,12 @@ namespace UserManagement
     ////////////////////////////////////////////////////////////
     void logOut(User *user)
     {
-        delete user;
+        user->group = PrivilageGroup::unset;
+        for (int i=0; i < 50; i++)
+        {
+            user->username[i] = 0;
+            user->password[i] = 0;
+        }
     }
 
     ////////////////////////////////////////////////////////////
@@ -59,7 +66,6 @@ namespace UserManagement
     ////////////////////////////////////////////////////////////
     FILE* reWriteUsers()
     {
-        // TODO:
         auto *user = new User;
         FILE *filePtr = fopen(USER_DB_FILE_PATH, "rb");
         FILE *tmpPtr = fopen(USER_TEMP_DB_FILE_PATH, "wb");
@@ -97,16 +103,85 @@ namespace UserManagement
     }
 
     ////////////////////////////////////////////////////////////
-    bool removeUser(std::string username, std::string password)
+    bool removeUser(std::string username)
     {
-        // TODO:
+        // TODO: Check if this works
+        auto *user = new User;
+        FILE *filePtr = fopen(USER_DB_FILE_PATH, "rb");
+        FILE *tmpPtr = fopen(USER_TEMP_DB_FILE_PATH, "wb");
+
+        if (filePtr == NULL || tmpPtr == NULL)
+        {
+            std::cerr << "Error creating file or accessing it! (FILE* reWriteUsers())" << std::endl;
+            return false;
+        }
+
+        while(fread(user, sizeof(User), 1, filePtr) != 0)
+        {
+            std::string helperUsername;
+            helperUsername = user->username;
+            if (helperUsername.compare(username) != 0)
+                fwrite(user, sizeof(User), 1, tmpPtr);
+        }
+
+        fclose(filePtr);
+        fclose(tmpPtr);
+        makeTempMainDb();
+
         return true;
     }
 
     ////////////////////////////////////////////////////////////
-    bool purgeUserDB()
+    void purgeUserDB()
     {
         // TODO:
-        return true;
+    }
+
+    ////////////////////////////////////////////////////////////
+    bool loadNthUsr(User *user, int n)
+    {
+        FILE *filePtr = fopen(USER_DB_FILE_PATH, "rb");
+
+        if (filePtr == NULL)
+        {
+            std::cerr << "Error creating file or accessing it! (bool loadNthUsr(User *user, int n))" << std::endl;
+            return false;
+        }
+
+        int iteration_num = 1;
+        while(fread(user, sizeof(User), 1, filePtr) != 0)
+        {
+            if (iteration_num == n)
+                return true;
+            iteration_num++;
+        }
+
+        fclose(filePtr);
+        return false;
+    }
+
+    ////////////////////////////////////////////////////////////
+    bool getUserByNickname(User *user, std::string username)
+    {
+        FILE *filePtr = fopen(USER_DB_FILE_PATH, "rb");
+
+        if (filePtr == NULL)
+        {
+            std::cerr << "Error creating file or accessing it! (bool getUserByNickname(User *user, std::string username))";
+            std::cout << std::endl;
+            return false;
+        }
+
+        while(fread(user, sizeof(User), 1, filePtr) != 0)
+        {
+            std::string helper;
+            helper = user->username;
+
+            if (username.compare(helper) == 0)
+                return true;
+        }
+
+        fclose(filePtr);
+        return false;
     }
 }
