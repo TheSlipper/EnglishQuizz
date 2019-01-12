@@ -8,7 +8,8 @@ file(GLOB SOURCE_FILES
         "src/QuestionManagement/*.cpp"
         "src/MiscellaneousUtilities/*.cpp"
         "src/UserInterface/*.cpp"
-        "src/UserManagement/*.cpp")
+        "src/UserManagement/*.cpp"
+        "src/ScoreManagement/*.cpp")
 
 include_directories("src")
 

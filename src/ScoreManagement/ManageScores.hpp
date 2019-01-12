@@ -1,0 +1,100 @@
+////////////////////////////////////////////////////////////
+// Created by Kornel Domeradzki.
+// Copyright © 2018 Kornel Domeradzki. All rights reserved.
+////////////////////////////////////////////////////////////
+#pragma once
+
+////////////////////////////////////////////////////////////
+// Definitions
+////////////////////////////////////////////////////////////
+#define SCORE_DB_FILE_PATH "scores.bin"
+#define SCORE_TEMP_DB_FILE_PATH "scores.temp"
+
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
+#include <iostream>
+#include "../DEFINITIONS.hpp"
+
+////////////////////////////////////////////////////////////
+/// \brief ScoreManagement to moduł zawierający funkcje zarządzające
+///         bazą danych ocen użytkowników
+///
+////////////////////////////////////////////////////////////
+namespace ScoreManagement
+{
+    ////////////////////////////////////////////////////////////
+    /// \brief Zawiera informacje na temat pewnej oceny
+    ///
+    /// \memberof char username[50] login użytkownika
+    ///
+    /// \memberof int points punkty użytkownika
+    ///
+    ////////////////////////////////////////////////////////////
+    struct Score
+    {
+        int id;
+        char username[50];
+        int points; // Pamiętaj 20 to max
+    };
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Funkcja z inną implementacją dla systemów UNIXowych
+    ///         i windowsowych. Zmienia nazwę pliku z SCORE_TEMP_DB_FILE_PATH na
+    ///         SCORE_DB_FILE_PATH.
+    ///
+    ////////////////////////////////////////////////////////////
+    void makeTempMainDb();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Przepisuje wszystkie oceny i zwraca wskaźnik do pliku
+    ///
+    /// \return FILE* wskaźnik do pliku
+    ///
+    ////////////////////////////////////////////////////////////
+    FILE* reWriteScores();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Funkcja dodająca nową ocenę dla użytkownika o podanym
+    ///         imieniu
+    ///
+    /// \param std::string userName nickname użytkownika
+    ///
+    /// \param int points liczba uzyskanych na teście punktów
+    ///
+    /// \returns bool jeżeli pomyślnie dodaje ocenę to zwraca true
+    ///
+    ////////////////////////////////////////////////////////////
+    bool addScore(std::string userName, int points);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Funkcja usuwająca ocenę o podanym id
+    ///
+    /// \param int id id oceny
+    ///
+    /// \return bool jeżeli pomyślnie usunie ocenę to zwróci true
+    ///
+    ////////////////////////////////////////////////////////////
+    bool removeScoreById(int id);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Funkcja ładująca ocenę o podanym id
+    ///
+    /// \param Score* score ocena do której ładujemy dane
+    ///
+    /// \param int id id oceny
+    ///
+    /// \return bool jeżeli pomyślnie załaduje ocenę to zwróci true
+    ///
+    ////////////////////////////////////////////////////////////
+    bool loadById(Score *score, int id);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Funkcja pobierająca nieużywane id
+    ///
+    /// \returns int zwraca numer id
+    ///
+    ////////////////////////////////////////////////////////////
+    int getNewId();
+
+}

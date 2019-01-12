@@ -46,8 +46,8 @@ namespace UserManagement
 
     ////////////////////////////////////////////////////////////
     /// \brief Funkcja z inną implementacją dla systemów UNIXowych
-    ///         i windowsowych. Zmienia nazwę pliku z USER_DB_TEMP na
-    ///         USER_TEMP_DB_FILE_PATH.
+    ///         i windowsowych. Zmienia nazwę pliku z USER_TEMP_DB_FILE_PATH na
+    ///         USER_DB_FILE_PATH.
     ///
     ////////////////////////////////////////////////////////////
     void makeTempMainDb();
