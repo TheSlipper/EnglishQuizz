@@ -104,7 +104,10 @@ namespace ScoreManagement
         while (fread(score, sizeof(Score), 1, filePtr) != 0)
         {
             if (score->id == id)
+            {
+                fclose(filePtr);
                 return true;
+            }
         }
 
         fclose(filePtr);
@@ -132,5 +135,24 @@ namespace ScoreManagement
         }
 
         return id;
+    }
+
+    ////////////////////////////////////////////////////////////
+    bool purgeScoreDb()
+    {
+#ifdef __WINDOWS__
+        // TODO: Implement deleting files for windows
+#endif
+#ifdef __UNIX__
+        std::string command = "rm ", command2 = "rm ", command3 = "echo > ";
+        command.append(SCORE_TEMP_DB_FILE_PATH);
+        command2.append(SCORE_DB_FILE_PATH);
+        command3.append(SCORE_DB_FILE_PATH);
+        system(command.c_str());
+        system(command2.c_str());
+        system(command3.c_str());
+#endif
+        MiscUtils::clearScreen();
+        return true;
     }
 }

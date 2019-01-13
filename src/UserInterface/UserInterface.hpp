@@ -8,9 +8,11 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <iostream>
+#include <ctime>
 #include "../UserManagement/UserManagement.hpp"
 #include "../MiscellaneousUtilities/MiscUtils.hpp"
 #include "../QuestionManagement/ManageQuestions.hpp"
+#include "../ScoreManagement/ManageScores.hpp"
 
 ////////////////////////////////////////////////////////////
 /// \brief UI namespace to moduł zawierający funkcje interfejsu
@@ -142,6 +144,24 @@ namespace UI
     ///
     ////////////////////////////////////////////////////////////
     void displayDeleteCurrentUser();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Wyświetla ekran testu
+    ///
+    /// \param UserManagement::User* user dane o użytkowniku
+    ///
+    ////////////////////////////////////////////////////////////
+    void displayTestScreen(UserManagement::User *user);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Wyświetla ekran z pojedyńczym pytaniem
+    ///
+    /// \param int* askedQuestions tablica z już zadanymi pytaniami
+    ///
+    /// \returns bool true gdy użytkownik poda poprawną odpowiedź
+    ///
+    ////////////////////////////////////////////////////////////
+    bool displayQuestionPanel(int* askedQuestions, int currentId);
 
     ////////////////////////////////////////////////////////////
     /// \brief Wypisuje na ekran wszystkie pytania

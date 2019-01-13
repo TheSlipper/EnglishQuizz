@@ -47,7 +47,7 @@ namespace UI
                         displayScores(user);
                     break;
                 case 2:
-                    // TODO:
+                    displayTestScreen(user);
                     break;
                 case 3:
                     displaySettingsPanel(user);
@@ -76,7 +76,8 @@ namespace UI
             std::cout << "2. Wyświetl oceny wszystkich studentów" << std::endl;
             std::cout << "3. Wyświetl oceny konkretnego studenta" << std::endl;
             std::cout << "4. Wyświetl panel zarządzania pytaniami" << std::endl;
-            std::cout << "5. Wróć do głównego menu" << std::endl;
+            std::cout << "5. Wyczyść wszystkie oceny" << std::endl;
+            std::cout << "6. Wróć do głównego menu" << std::endl;
             std::cout << ">";
             std::cin >> *choice;
 
@@ -95,6 +96,9 @@ namespace UI
                     displayQuestionMgmtPanel();
                     break;
                 case 5:
+                    ScoreManagement::purgeScoreDb();
+                    break;
+                case 6:
                     return;
                 default:
                     incorrectOptionEntered();
@@ -159,6 +163,7 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void addQuestionPanel()
     {
+        // TODO: Add 20 questions
         auto entry = new QuestionManagement::QuestionEntry;
         char correct_answer;
         entry->question_id = QuestionManagement::getNewId();
@@ -167,16 +172,17 @@ namespace UI
         std::cout << "====== Dodawanie pytania ======" << std::endl;
         std::cout << "Nowe nadane przez system ID: " << entry->question_id << std::endl; //id here
         std::cout << "1. Wprowadź pytanie: ";
-        std::cin >> entry->question; // TODO: getline() bo tutaj jak będzie spacja to lipa iirc
+        std::cin.ignore();
+        std::cin.getline(entry->question, 200);
 
         std::cout << "2. Wprowadź odpowiedź A: ";
-        std::cin >> entry->answerA;
+        std::cin.getline(entry->answerA, 100);
         std::cout << "3. Wprowadź odpowiedź B: ";
-        std::cin >> entry->answerB;
+        std::cin.getline(entry->answerB, 100);
         std::cout << "4. Wprowadź odpowiedź C: ";
-        std::cin >> entry->answerC;
+        std::cin.getline(entry->answerC, 100);
         std::cout << "5. Wprowadź odpowiedź D: ";
-        std::cin >> entry->answerD;
+        std::cin.getline(entry->answerD, 100);
 
         std::cout << "5. Wprowadź poprawną odpowiedź (A/B/C/D): ";
         std::cin >> correct_answer;
@@ -237,16 +243,17 @@ namespace UI
         std::cout << "\r\n\r\nPoprawna odpowiedź: " << question->correctAnswer << std::endl << std::endl;
 
         std::cout << "Wprowadź pytanie: ";  // TODO: Remember to change this to getline()
-        std::cin >> question->question;
+        std::cin.ignore();
+        std::cin.getline(question->question, 200);
 
         std::cout <<"Wprowadź odpowiedź A: ";
-        std::cin >> question->answerA;
+        std::cin.getline(question->answerA, 100);
         std::cout <<"Wprowadź odpowiedź B: ";
-        std::cin >> question->answerB;
+        std::cin.getline(question->answerB, 100);
         std::cout <<"Wprowadź odpowiedź C: ";
-        std::cin >> question->answerC;
+        std::cin.getline(question->answerC, 100);
         std::cout <<"Wprowadź odpowiedź D: ";
-        std::cin >> question->answerD;
+        std::cin.getline(question->answerD, 100);
 
         std::cout << "Która odpowiedź jest poprawna (A/B/C/D)? : ";
         std::cin >> odp;
@@ -274,6 +281,7 @@ namespace UI
         QuestionManagement::deleteQuestionById(question_num);
         QuestionManagement::addQuestion(question);
         std::cout << "Pomyślnie zedytowano pytanie o ID " << question_num << std::endl;
+        std::cin.clear();
     }
 
     ////////////////////////////////////////////////////////////
@@ -346,6 +354,7 @@ namespace UI
                     displayAddUserPanel();
                     break;
                 case 3:
+                    // TODO: Consider deleting this option
                     break;
                 case 4:
                     displayDeleteUserPanel();
@@ -362,8 +371,17 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void displayAllScores()
     {
-        // TODO:
-
+        MiscUtils::clearScreen();
+        auto *score = new ScoreManagement::Score;
+        int id = 1;
+        while (ScoreManagement::loadById(score, id))
+        {
+            std::cout << "ID oceny: " << id << std::endl;
+            std::cout << "Nickname: " << score->username << std::endl;
+            std::cout << "Punkty: [" << score->points << "/20]" << std::endl;
+            std::cout << std::endl << std::endl;
+            id++;
+        }
     }
 
     ////////////////////////////////////////////////////////////
@@ -415,7 +433,6 @@ namespace UI
         {
             auto *user = new UserManagement::User;
             // TODO: Consider unique_ptr
-//            std::unique_ptr<UserManagement::User> user = std::make_unique<UserManagement::User>();
             MiscUtils::clearScreen();
             std::cout << "===============================" << std::endl;
             std::cout << "========= Zaloguj się =========" << std::endl;
@@ -514,6 +531,83 @@ namespace UI
     void displayDeleteCurrentUser()
     {
         // TODO:
+    }
+
+    ////////////////////////////////////////////////////////////
+    void displayTestScreen(UserManagement::User *user)
+    {
+        // TODO: Check if works
+        MiscUtils::clearScreen();
+        char readyOrNot;
+        int points = 0;
+        int askedQuestions[20];
+        std::string username = user->username;
+
+        std::cout << "===============================" << std::endl;
+        std::cout << "============= Test ============" << std::endl;
+        std::cout << "Przed tobą dwadzieścia pytań z angielskiego" << std::endl;
+        std::cout << "Masz nieograniczony czas na ich rozwiązanie ale możesz tylko" << std::endl;
+        std::cout << "raz podać odpowiedź - nie możesz wrócić do poprzedniego pytania" << std::endl;
+        std::cout << "Jest to test wielokrotnego wyboru (A/B/C/D) z tylko jedną" << std::endl;
+        std::cout << "poprawną odpowiedzią. Powodzenia!" << std::endl;
+        std::cout << "(Gdy będziesz gotów wpisz 'R' i kliknij enter" << std::endl;
+        std::cout << ">";
+        std::cin >> readyOrNot;
+
+        for (int i = 0; i < 20; i++)
+        {
+            if (displayQuestionPanel(askedQuestions, i))
+                points ++;
+        }
+
+        MiscUtils::clearScreen();
+        std::cout << "Podsumowanie testu i ocena: " << std::endl;
+        std::cout << "Nickname: " << username << std::endl;
+        std::cout << "Ocena: [" << points << "/20]" << std::endl;
+        std::cout << "Wpisz 'k' by kontynuować" << std::endl;
+        std::cin >> readyOrNot;
+        ScoreManagement::addScore(username, points);
+    }
+
+    ////////////////////////////////////////////////////////////
+    bool displayQuestionPanel(int* askedQuestions, int currentId)
+    {
+        // TODO: Check if works after adding all the 100 questions
+        srand(time(NULL));
+        MiscUtils::clearScreen();
+        int randomNum = 0;
+        auto* question = new QuestionManagement::QuestionEntry;
+        char answer;
+
+        // Losuj dopóki nie ma nowego pytania (unikanie duplikatów)
+        while (true)
+        {
+            bool hasTheRandNum = false;
+            randomNum = std::rand()%100+1;
+            for (int i = 0; i < currentId; i++)
+            {
+                if (randomNum == askedQuestions[i])
+                    hasTheRandNum = true;
+            }
+
+            if (!hasTheRandNum)
+                break;
+        }
+        askedQuestions[currentId] = randomNum;
+
+        QuestionManagement::getQuestionById(question, randomNum);
+        std::cout << question->question_id << ". " << question->question << std::endl;
+        std::cout << "A. " << question->answerA << std::endl;
+        std::cout << "B. " << question->answerB << std::endl;
+        std::cout << "C. " << question->answerC << std::endl;
+        std::cout << "D. " << question->answerD << std::endl;
+        std::cout << ">";
+        std::cin >> answer;
+
+        int someCharval = tolower(answer) - 97;
+        int blabla = (int)question->correctAnswer;
+        bool some_value =  someCharval == blabla;
+        return some_value;
     }
 
     ////////////////////////////////////////////////////////////
