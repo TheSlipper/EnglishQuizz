@@ -90,7 +90,7 @@ namespace UI
                     printAllScores();
                     break;
                 case 3:
-//                    displayScoresPanel();
+                    displaySpecificUserScorePanel();
                     // TODO:
                     break;
                 case 4:
@@ -398,6 +398,29 @@ namespace UI
                 std::cout << std::endl << std::endl;
             }
             id++;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////
+    void displaySpecificUserScorePanel()
+    {
+        MiscUtils::clearScreen();
+        std::string username;
+        auto *score = new ScoreManagement::Score;
+        int index = 1;
+        std::cout << "Podaj nickname użytkownika: ";
+        std::cin >> username;
+
+        MiscUtils::clearScreen();
+        while (ScoreManagement::loadById(score, index))
+        {
+            std::string tempUsername = score->username;
+            if (tempUsername.compare(username) == 0)
+            {
+                std::cout << "ID: " << score->id << std::endl;
+                std::cout << "Ocena: [" << score->points << "/20]" << std::endl;
+            }
+            index++;
         }
     }
 
