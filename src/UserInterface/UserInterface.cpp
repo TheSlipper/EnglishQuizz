@@ -163,7 +163,6 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void addQuestionPanel()
     {
-        // TODO: Add 20 questions
         auto entry = new QuestionManagement::QuestionEntry;
         char correct_answer;
         entry->question_id = QuestionManagement::getNewId();
@@ -242,7 +241,7 @@ namespace UI
         std::cout << "\r\nOdpowiedź C: " << question->answerC << "\r\nOdpowiedź D: " << question->answerD;
         std::cout << "\r\n\r\nPoprawna odpowiedź: " << question->correctAnswer << std::endl << std::endl;
 
-        std::cout << "Wprowadź pytanie: ";  // TODO: Remember to change this to getline()
+        std::cout << "Wprowadź pytanie: ";
         std::cin.ignore();
         std::cin.getline(question->question, 200);
 
@@ -340,9 +339,8 @@ namespace UI
             std::cout << "== Zarządzanie użytkownikami ==" << std::endl;
             std::cout << "1. Pokaż wszystkich użytkowników" << std::endl;
             std::cout << "2. Dodaj użytkownika" << std::endl;
-            std::cout << "3. Edytuj użytkownika" << std::endl;
-            std::cout << "4. Usuń użytkownika" << std::endl;
-            std::cout << "5. Wróć do opcji administracyjnych" << std::endl;
+            std::cout << "3. Usuń użytkownika" << std::endl;
+            std::cout << "4. Wróć do opcji administracyjnych" << std::endl;
             std::cout << ">";
             std::cin >> *choice;
             switch(*choice)
@@ -354,12 +352,9 @@ namespace UI
                     displayAddUserPanel();
                     break;
                 case 3:
-                    // TODO: Consider deleting this option
-                    break;
-                case 4:
                     displayDeleteUserPanel();
                     break;
-                case 5:
+                case 4:
                     return;
                 default:
                     incorrectOptionEntered();
@@ -399,7 +394,6 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void displaySettingsPanel(UserManagement::User *user)
     {
-        // TODO: Check if works
         MiscUtils::clearScreen();
         while (true)
         {
@@ -432,7 +426,6 @@ namespace UI
         while(true)
         {
             auto *user = new UserManagement::User;
-            // TODO: Consider unique_ptr
             MiscUtils::clearScreen();
             std::cout << "===============================" << std::endl;
             std::cout << "========= Zaloguj się =========" << std::endl;
@@ -458,7 +451,7 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void displayAddUserPanel()
     {
-        MiscUtils::clearScreen();   // TODO: Check if this is needed
+        MiscUtils::clearScreen();
         std::string name, password;
         int group;
         std::cout << "Wprowadź nowy login: ";
@@ -536,7 +529,6 @@ namespace UI
     ////////////////////////////////////////////////////////////
     void displayTestScreen(UserManagement::User *user)
     {
-        // TODO: Check if works
         MiscUtils::clearScreen();
         char readyOrNot;
         int points = 0;
@@ -572,7 +564,6 @@ namespace UI
     ////////////////////////////////////////////////////////////
     bool displayQuestionPanel(int* askedQuestions, int currentId)
     {
-        // TODO: Check if works after adding all the 100 questions
         srand(time(NULL));
         MiscUtils::clearScreen();
         int randomNum = 0;

@@ -66,7 +66,6 @@ namespace QuestionManagement
     ////////////////////////////////////////////////////////////
     bool deleteQuestionById(int id)
     {
-        // TODO: Test if this works
         QuestionEntry *entry = new QuestionEntry;
         FILE *filePtr = fopen(DB_FILE_PATH, "rb");
         FILE *tmpPtr = fopen(TEMP_DB_FILE_PATH, "wb");
@@ -91,12 +90,6 @@ namespace QuestionManagement
     }
 
     ////////////////////////////////////////////////////////////
-    void updateQuestion()
-    {
-        // TODO:
-    }
-
-    ////////////////////////////////////////////////////////////
     void purgeQuestions()
     {
 #ifdef __WINDOWS__
@@ -118,7 +111,6 @@ namespace QuestionManagement
     ////////////////////////////////////////////////////////////
     void exportQuestions(std::string filePath)
     {
-        // TODO: Check if works
 #ifdef __WINDOWS__
         // TODO: Implement exporting database for windows
 #endif
@@ -134,7 +126,6 @@ namespace QuestionManagement
     ////////////////////////////////////////////////////////////
     void importQuestions(std::string filePath)
     {
-        // TODO: Check if works
 #ifdef __WINDOWS__
         // TODO: Implement importing database for windows
 #endif
@@ -205,7 +196,6 @@ namespace QuestionManagement
         if (strcmp(entry->question, "") && prev_val == 0)
             return 1;
 
-        // TODO: Check if this will return value
         prev_val++;
         return prev_val;
     }

@@ -113,7 +113,6 @@ namespace UserManagement
     ////////////////////////////////////////////////////////////
     bool removeUser(std::string username)
     {
-        // TODO: Check if this works
         auto *user = new User;
         FILE *filePtr = fopen(USER_DB_FILE_PATH, "rb");
         FILE *tmpPtr = fopen(USER_TEMP_DB_FILE_PATH, "wb");
