@@ -44,7 +44,7 @@ namespace UI
                     if (user->group == UserManagement::PrivilageGroup::teacher)
                         displayAdminOptions();
                     else
-                        displayScores(user);
+                        printMyScores(user);
                     break;
                 case 2:
                     displayTestScreen(user);
@@ -87,10 +87,11 @@ namespace UI
                     displayUsrMgmtPanel();
                     break;
                 case 2:
-                    displayAllScores();
+                    printAllScores();
                     break;
                 case 3:
-                    displayScoresPanel();
+//                    displayScoresPanel();
+                    // TODO:
                     break;
                 case 4:
                     displayQuestionMgmtPanel();
@@ -364,7 +365,7 @@ namespace UI
     }
 
     ////////////////////////////////////////////////////////////
-    void displayAllScores()
+    void printAllScores()
     {
         MiscUtils::clearScreen();
         auto *score = new ScoreManagement::Score;
@@ -380,15 +381,24 @@ namespace UI
     }
 
     ////////////////////////////////////////////////////////////
-    void displayScores(UserManagement::User *user)
+    void printMyScores(UserManagement::User *user)
     {
-        // TODO:
-    }
-
-    ////////////////////////////////////////////////////////////
-    void displayScoresPanel()
-    {
-        // TODO:
+        MiscUtils::clearScreen();
+        auto *score = new ScoreManagement::Score;
+        int id = 1;
+        while (ScoreManagement::loadById(score, id))
+        {
+            std::string helperUsername1 = score->username;
+            std::string helperUsername2 = user->username;
+            if (helperUsername1.compare(helperUsername2) == 0)
+            {
+                std::cout << "ID oceny: " << id << std::endl;
+                std::cout << "Nickname: " << score->username << std::endl;
+                std::cout << "Punkty: [" << score->points << "/20]" << std::endl;
+                std::cout << std::endl << std::endl;
+            }
+            id++;
+        }
     }
 
     ////////////////////////////////////////////////////////////

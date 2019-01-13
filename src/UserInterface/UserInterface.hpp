@@ -90,7 +90,7 @@ namespace UI
     /// \brief Wyświetla oceny wszystkich uczniów
     ///
     ////////////////////////////////////////////////////////////
-    void displayAllScores();
+    void printAllScores();
 
     ////////////////////////////////////////////////////////////
     /// \brief Wyświetla oceny zalogowanego użytkownika
@@ -98,14 +98,7 @@ namespace UI
     /// \param UserManagement::User* user Informacje nt. użytkownika
     ///
     ////////////////////////////////////////////////////////////
-    void displayScores(UserManagement::User *user);
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Wyświetla panel do wpisania imienia oraz
-    ///         nazwiska użytkownika
-    ///
-    ////////////////////////////////////////////////////////////
-    void displayScoresPanel();
+    void printMyScores(UserManagement::User *user);
 
     ////////////////////////////////////////////////////////////
     /// \brief Wyświetla ustawienia programu (ustawienia są globalne)

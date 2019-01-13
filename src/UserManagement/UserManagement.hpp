@@ -15,6 +15,7 @@
 ////////////////////////////////////////////////////////////
 #include <iostream>
 #include "../DEFINITIONS.hpp"
+#include "../MiscellaneousUtilities/MiscUtils.hpp"
 
 ////////////////////////////////////////////////////////////
 /// \brief UserManagement namespace to moduł zawierający

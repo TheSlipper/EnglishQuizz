@@ -141,7 +141,19 @@ namespace UserManagement
     ////////////////////////////////////////////////////////////
     void purgeUserDB()
     {
-        // TODO:
+#ifdef __WINDOWS__
+        // TODO: Implement deleting files for windows
+#endif
+#ifdef __UNIX__
+        std::string command = "rm ", command2 = "rm ", command3 = "echo > ";
+        command.append(USER_TEMP_DB_FILE_PATH);
+        command2.append(USER_DB_FILE_PATH);
+        command3.append(USER_DB_FILE_PATH);
+        system(command.c_str());
+        system(command2.c_str());
+        system(command3.c_str());
+#endif
+        MiscUtils::clearScreen();
     }
 
     ////////////////////////////////////////////////////////////
