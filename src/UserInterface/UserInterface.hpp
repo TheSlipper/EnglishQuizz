@@ -138,13 +138,6 @@ namespace UI
     void displayDeleteUserPanel();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Wyświetla ekran usuwania zalogowanego użytkownika
-    ///         (część panelu studenta)
-    ///
-    ////////////////////////////////////////////////////////////
-    void displayDeleteCurrentUser();
-
-    ////////////////////////////////////////////////////////////
     /// \brief Wyświetla ekran testu
     ///
     /// \param UserManagement::User* user dane o użytkowniku

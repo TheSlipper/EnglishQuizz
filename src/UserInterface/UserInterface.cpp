@@ -91,7 +91,6 @@ namespace UI
                     break;
                 case 3:
                     displaySpecificUserScorePanel();
-                    // TODO:
                     break;
                 case 4:
                     displayQuestionMgmtPanel();
@@ -554,12 +553,6 @@ namespace UI
     }
 
     ////////////////////////////////////////////////////////////
-    void displayDeleteCurrentUser()
-    {
-        // TODO:
-    }
-
-    ////////////////////////////////////////////////////////////
     void displayTestScreen(UserManagement::User *user)
     {
         MiscUtils::clearScreen();
@@ -639,7 +632,6 @@ namespace UI
     {
         std::cout << "\r\n\r\n\r\n" << std::endl;
         auto *question = new QuestionManagement::QuestionEntry;
-        // TODO: Finish this function
         for (int i = 1; ; i++)
         {
             if (QuestionManagement::getQuestionById(question, i))

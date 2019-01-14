@@ -15,7 +15,11 @@ namespace QuestionManagement
     void makeTempMainDb()
     {
 #ifdef __WINDOWS__
-        // TODO: Implement moving files for windows
+        std::string command = "move ";
+        command.append(TEMP_DB_FILE_PATH);
+        command.append(" ");
+        command.append(DB_FILE_PATH);
+        system(command.c_str());
 #endif
 #ifdef __UNIX__
         std::string command = "mv ";
@@ -93,7 +97,15 @@ namespace QuestionManagement
     void purgeQuestions()
     {
 #ifdef __WINDOWS__
-        // TODO: Implement moving files for windows
+        std::string command1 = "del ", command2 = "del ", commmand3 = "echo > ", command4 = "echo > ";
+        command1.append(TEMP_DB_FILE_PATH);
+        command2.append(DB_FILE_PATH);
+        command3.append(TEMP_DB_FILE_PATH);
+        command4.append(DB_FILE_PATH);
+        system(command1.c_str());
+        system(command2.c_str());
+        system(command3.c_str());
+        system(command4.c_str());
 #endif
 #ifdef __UNIX__
         std::string command1 = "rm ", command2 = "rm ", command3 = "echo > ", command4 = "echo > ";
@@ -112,7 +124,11 @@ namespace QuestionManagement
     void exportQuestions(std::string filePath)
     {
 #ifdef __WINDOWS__
-        // TODO: Implement exporting database for windows
+        std::string command1 = "xcopy ";
+        command1.append(DB_FILE_PATH);
+        command1.append(" ");
+        command1.append(filePath);
+        system(command1.c_str());
 #endif
 #ifdef __UNIX__
         std::string command1 = "cp ";
@@ -127,7 +143,11 @@ namespace QuestionManagement
     void importQuestions(std::string filePath)
     {
 #ifdef __WINDOWS__
-        // TODO: Implement importing database for windows
+        std::string command1 = "xcopy ";
+        command1.append(filePath);
+        command1.append(" ");
+        command1.append(DB_FILE_PATH);
+        system(command1.c_str());
 #endif
 #ifdef __UNIX__
         std::string command1 = "cp ";

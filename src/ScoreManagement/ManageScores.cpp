@@ -14,7 +14,11 @@ namespace ScoreManagement
     void makeTempMainDb()
     {
 #ifdef __WINDOWS__
-        // TODO: Implement moving files for windows
+        std::string command = "mv ";
+        command.append(SCORE_TEMP_DB_FILE_PATH);
+        command.append(" ");
+        command.append(SCORE_DB_FILE_PATH);
+        system(command.c_str());
 #endif
 #ifdef __UNIX__
         std::string command = "mv ";
@@ -141,7 +145,13 @@ namespace ScoreManagement
     bool purgeScoreDb()
     {
 #ifdef __WINDOWS__
-        // TODO: Implement deleting files for windows
+        std::string command = "del ", command2 = "del ", command3 = "echo > ";
+        command.append(SCORE_TEMP_DB_FILE_PATH);
+        command2.append(SCORE_DB_FILE_PATH);
+        command3.append(SCORE_DB_FILE_PATH);
+        system(command.c_str());
+        system(command2.c_str());
+        system(command3.c_str());
 #endif
 #ifdef __UNIX__
         std::string command = "rm ", command2 = "rm ", command3 = "echo > ";
